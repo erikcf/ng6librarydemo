@@ -1,0 +1,54 @@
+<div class="row">
+  <div class="col-12">
+    <h3>Search book</h3>
+  </div>
+  <div class="col-6">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" class="form-control" id="name" [(ngModel)]="bookName" (keyup)="getAllBooks()">
+    </div>
+  </div>
+</div>
+
+<div class="row" *ngIf="books$">
+  <div class="col-12">
+    <h3>Books</h3>
+  </div>
+  <div class="py-2 col-12">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Name</th>
+          <th>Availability</th>
+          <th>Loan book</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let book of books$">
+          <td>{{ book.bookId }}</td>
+          <td>{{ book.bookName }}</td>
+          <td>{{ getAvailabilityText(book) }}</td>
+          <td class="mouse-icon-hover" *ngIf="book.available">
+              <i class="material-icons icon-success" (click)="loanBook(book.bookId)">
+                add
+              </i>            
+          </td>
+          <td *ngIf="!book.available">
+            <i class="material-icons icon-danger">
+              clear
+            </i>
+          </td>
+          <td>
+            <a class="book-links" [routerLink]="['/book', book.bookId]">
+              <i class="material-icons">
+                info
+              </i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

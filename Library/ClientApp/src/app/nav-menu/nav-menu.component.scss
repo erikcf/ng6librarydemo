@@ -1,0 +1,33 @@
+nav {
+  height: 100%;
+
+  li.link-active a,
+  li.link-active a:hover,
+  li.link-active a:focus {
+    background-color: #4189C7;
+  }
+
+  a:hover {
+    text-decoration: none;
+    color: #f2f2f2;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: auto;
+
+    li {
+
+      a {
+        color: #fff;
+        padding: 20px;
+        display: block;
+      }
+    }
+  }
+
+  li {
+    margin-right: 20px;
+  }
+}

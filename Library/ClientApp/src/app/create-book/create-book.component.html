@@ -1,0 +1,13 @@
+<div class="row">
+  <div class="col-6">
+    <h3>Create Book</h3>
+    <label for="inputFirstName">Name</label>
+    <input type="text" id="inputFirstName" [(ngModel)]="name" class="form-control" (keydown.enter)="createBook()">
+    <br />
+    <button class="btn btn-lg btn-primary btn-block" (click)="createBook()">Create</button>
+  </div>
+</div>
+<div class="row mt-2">
+  <p *ngIf="bookCreated" class="text-success">Book created!</p>
+  <p *ngIf="bookFailed" class="text-danger">Book not created!</p>
+</div>

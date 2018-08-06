@@ -1,0 +1,43 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" [routerLink]='["/"]'>Library</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarToggler">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+        <a [routerLink]='["/"]'>
+          <i class="material-icons">
+          home
+          </i>
+          <span>Home</span>
+        </a>
+      </li>
+      <li class="nav-item" [routerLinkActive]='["link-active"]'>
+        <a [routerLink]='["/createuser"]'>
+          <i class="material-icons">
+            supervised_user_circle
+          </i>
+          <span>Create user</span>
+        </a>
+      </li>
+      <li class="nav-item" [routerLinkActive]='["link-active"]'>
+        <a [routerLink]='["/createbook"]' *ngIf="storage.get('currentUser')">
+          <i class="material-icons">
+            library_books
+          </i>
+          <span>Create book</span>
+        </a>
+      </li>
+      <li class="nav-item" [routerLinkActive]='["link-active"]'>
+        <a [routerLink]='["/loan"]' *ngIf="storage.get('currentUser')">
+          <i class="material-icons">
+            search
+          </i>
+          <span>Loan book</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>

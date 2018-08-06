@@ -1,0 +1,29 @@
+<div class="row" *ngIf="loans$ && loans$.length > 0">
+  <div class="col">
+    <h3>History {{ bookName }}</h3>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Active loan</th>
+          <th>Lend by</th>
+          <th>Lend date</th>
+          <th>Returned</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let loan of loans$">
+          <td *ngIf="loan.active">Yes</td>
+          <td *ngIf="!loan.active">No</td>
+          <td>{{ loan.fullName }}</td>
+          <td>{{ loan.created | date: 'yyyy-MM-dd'}}</td>
+          <td *ngIf="!loan.active">{{ loan.finished | date: 'yyyy-MM-dd'}}</td>
+          <td *ngIf="loan.active">Not returned</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="row" *ngIf="loans$ && loans$.length === 0">
+  <h2>No history!</h2>
+</div>
+

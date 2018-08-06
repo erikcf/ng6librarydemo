@@ -1,0 +1,59 @@
+<div *ngIf="currentUser === '' || !currentUser" class="row">
+
+    <div class="col-sm-4 mx-auto">
+        <h3>Log in</h3>
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input type="email" id="inputEmail" [(ngModel)]="inputEmail" class="form-control" placeholder="Email address">
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" [(ngModel)]="inputPassword" (keydown.enter)="logInUser()" class="form-control" placeholder="Password">
+        <br/>
+      <button class="btn btn-lg btn-primary btn-block" (click)="logInUser()">Sign in</button>
+      <p *ngIf="isLoginFailed" class="text-danger">Login failed! Try again.</p>
+    </div>
+
+</div>
+
+<div class="row" *ngIf="currentUser !== ''">
+  <div class="col-sm-8">
+      <h3>
+        Welcome {{storage.get('currentFirstName')}} {{storage.get('currentLastName')}}
+      </h3>     
+  </div>
+  <div class="col-sm-4">
+    <button class="btn btn-lg btn-primary float-right" (click)="logout()">Log out</button>
+  </div>
+</div>
+<div class="row" *ngIf="loans && loans.length > 0">
+  <div class="col mt-3 mx-auto">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Active loan</th>
+          <th>Name of book</th>
+          <th>Lend date</th>
+          <th>Returned</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let loan of loans">
+          <td *ngIf="loan.active">Yes</td>
+          <td *ngIf="!loan.active">No</td>
+          <td>{{ loan.bookName }}</td>
+          <td>{{ loan.created | date: 'yyyy-MM-dd'}}</td>
+          <td *ngIf="!loan.active">{{ loan.finished | date: 'yyyy-MM-dd'}}</td>
+          <td *ngIf="loan.active" class="mouse-icon-hover" (click)="returnBook(loan.loanId)">
+            <p>
+              Return book
+              <i class="material-icons icon-success">
+                assignment_return
+              </i>
+            </p>
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

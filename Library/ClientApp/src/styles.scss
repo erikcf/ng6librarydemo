@@ -1,0 +1,23 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "~bootswatch/dist/minty/variables";
+@import "~bootstrap/scss/bootstrap";
+@import "~bootswatch/dist/minty/bootswatch";
+
+$font-stack: 'Montserrat', sans-serif;
+
+body {
+  margin: 0;
+  font-family: $font-stack !important;
+}
+.mouse-icon-hover {
+  i:hover, p:hover {
+    cursor: pointer;
+  }  
+}
+.icon-success {
+    color: #148b25;
+}
+.icon-danger {
+    color: #c61616;
+}
