@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/Library/config/applicationhost.config
+/.vs/Library/v16/Server/sqlite3
+/.vs/Library/v16/.suo
+/.vs/Library/DesignTimeBuild/.dtbcache
