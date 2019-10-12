@@ -40,11 +40,9 @@ namespace Library.Controllers
 
         [HttpGet("[action]")]
         [ProducesResponseType(typeof(BookDto), 200)]
-        [ProducesResponseType(404)]
         public async Task<IActionResult> GetAllBooks([FromQuery] string name)
         {
             var books = await _bookService.GetAllBooks(name);
-            if (!books.Any()) { return NotFound(); }
             return Ok(books.Select(BookDto.FromBook));
         }
 

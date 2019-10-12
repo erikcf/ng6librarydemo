@@ -1,49 +1,51 @@
 <div *ngIf="currentUser === '' || !currentUser" class="row">
 
-    <div class="col-sm-3 mx-auto">
-      <h3>Log in</h3>
-      <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-        <mat-form-field>
-          <input matInput
-                 placeholder="Email address"
-                 formControlName="emailFormControl"
-                 name="email"
-                 class="pt-2"/>
-          <mat-error *ngIf="
+  <div class="col-sm-3 mx-auto">
+    <h3>Log in</h3>
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+      <mat-form-field>
+        <input matInput
+               placeholder="Email address"
+               formControlName="emailFormControl"
+               name="email"
+               class="pt-3"
+               type="email"/>
+        <mat-error *ngIf="
               !formGroup.get('emailFormControl').valid &&
               formGroup.get('emailFormControl').touched
             ">
-            Please enter a valid email address
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput
-                 placeholder="Password"
-                 formControlName="passwordFormControl"
-                 name="password"
-                 class="pt-2"/>
-          <mat-error *ngIf="
+          Please enter a valid email address
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput
+               placeholder="Password"
+               formControlName="passwordFormControl"
+               name="password"
+               class="pt-3"
+               type="password"/>
+        <mat-error *ngIf="
               !formGroup.get('passwordFormControl').valid &&
               formGroup.get('passwordFormControl').touched
             ">
-            Please enter a valid password
-          </mat-error>
-        </mat-form-field>
-        <button mat-raised-button color="primary" [disabled]="!formGroup.valid">
-          Sign in
-        </button>
-          
-        <p *ngIf="isLoginFailed" class="text-danger pt-3">Login failed! Try again.</p>
-      </form>
-    </div>
+          Please enter a valid password
+        </mat-error>
+      </mat-form-field>
+      <button mat-raised-button color="primary" [disabled]="!formGroup.valid" class="mt-3">
+        Sign in
+      </button>
+
+      <p *ngIf="isLoginFailed" class="text-danger pt-3">Login failed! Try again.</p>
+    </form>
+  </div>
 
 </div>
 
 <div class="row" *ngIf="currentUser !== ''">
   <div class="col-sm-8">
-      <h3>
-        Welcome {{storage.get('currentFirstName')}} {{storage.get('currentLastName')}}
-      </h3>     
+    <h3>
+      Welcome {{storage.get('currentFirstName')}} {{storage.get('currentLastName')}}
+    </h3>
   </div>
   <div class="col-sm-4">
     <button class="btn btn-lg btn-primary float-right" (click)="logout()">Log out</button>
