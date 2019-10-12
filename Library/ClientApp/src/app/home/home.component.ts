@@ -2,6 +2,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { SESSION_STORAGE, WebStorageService } from 'angular-webstorage-service';
 import { DataService } from '../data.service';
 import { Observable } from 'rxjs';
+import { FormControl, Validators, FormGroup } from "@angular/forms";
+
 
 @Component({
   selector: 'app-home',
@@ -9,13 +11,17 @@ import { Observable } from 'rxjs';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  inputEmail: string = "";
-  inputPassword: string = "";
   currentUser: string = "";
   user: IUser;
   loans: ILoan[];
   isLoginFailed: boolean = false;
-
+  formGroup = new FormGroup({
+    emailFormControl: new FormControl("", [
+      Validators.required,
+      Validators.email
+    ]),
+    passwordFormControl: new FormControl("", [Validators.required])
+  });
   constructor(@Inject(SESSION_STORAGE) private storage: WebStorageService, private data: DataService) {}
   ngOnInit() {
     if (typeof this.storage.get("currentUser") !== 'undefined' && this.storage.get("currentUser") !== null) {
@@ -24,8 +30,9 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  logInUser() {    
-    this.data.logInUser(this.inputEmail, this.inputPassword).subscribe(result => {
+  onSubmit() {    
+      this.data.logInUser(this.formGroup.get("emailFormControl").value, this.formGroup.get("passwordFormControl").value)
+        .subscribe(result => {
       this.user = result.body as IUser;
       this.currentUser = this.user.email;
       this.storage.set('currentUser', this.user.email);
