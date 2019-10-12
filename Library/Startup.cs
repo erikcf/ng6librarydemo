@@ -1,4 +1,6 @@
+using Library.Commands;
 using Library.Models;
+using Library.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -23,6 +25,10 @@ namespace Library
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IBookService, BookService>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ILoanService, LoanService>();
+            services.AddTransient<CommandRunner>();
             services.AddMvc();
             services.AddControllers();
             services.AddDbContext<LibraryContext>(options =>

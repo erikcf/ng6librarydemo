@@ -9,30 +9,30 @@ export class DataService {
   constructor(private http: HttpClient) { }
 
   getAllBooks(name) {
-    return this.http.get("/api/BookData/GetAllBooks?name=" + name);
+    return this.http.get(`/api/Book/GetAllBooks?name=${name}`);
   }
-  loanBook(id, userid) {
-    return this.http.post("/api/BookData/CreateLoan?userId=" + userid + "&bookId=" + id, null, { observe: 'response'});
+  loanBook(loan) {
+    return this.http.post(`/api/Loan/CreateLoan`, loan, { observe: 'response'});
   }
   logInUser(email, password) {
-    return this.http.get("/api/BookData/LogInUser?email=" + email + "&password=" + password);
+      return this.http.get(`/api/User/LogInUser?email=${email}&password=${password}`, { observe: 'response' });
   }
   getLoanInfo(id) {
-    return this.http.get("/api/BookData/GetLoansByUserId/" + id);
+    return this.http.get(`/api/Loan/GetLoansByUserId/${id}`);
   }
-  returnBook(id) {
-    return this.http.put("/api/BookData/ReturnLoan/" + id, null);
+  returnBook(id, loan) {
+      return this.http.put(`/api/Loan/UpdateLoan/${id}`, loan);
   }
   createUser(user) {
-    return this.http.post("/api/BookData/CreateUser", user, { observe: 'response' });
+    return this.http.post("/api/User/CreateUser", user, { observe: 'response' });
   }
   createBook(book) {
-    return this.http.post("/api/BookData/CreateBook", book, { observe: 'response' });
+    return this.http.post("/api/Book/CreateBook", book, { observe: 'response' });
   }
   getBookInfo(id) {
-    return this.http.get("/api/BookData/GetLoansForBookById/" + id);
+    return this.http.get(`/api/Loan/GetLoansForBookById/${id}`);
   }
   getBookName(id) {
-    return this.http.get("/api/BookData/GetBookById/" + id);
+    return this.http.get(`/api/Book/GetBookById/${id}`);
   }
 }

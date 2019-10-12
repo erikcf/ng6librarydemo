@@ -25,7 +25,7 @@ export class CreateUserComponent {
       return;
     }
 
-    let user = { firstName: this.firstName, lastName: this.lastName, email: this.email, password: this.password };
+    const user = { firstName: this.firstName, lastName: this.lastName, email: this.email, password: this.password };
     this.data.createUser(user).subscribe(result => {
       if (result.status === 201) {
         this.createFailed = false;

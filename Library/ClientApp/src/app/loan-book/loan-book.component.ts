@@ -21,10 +21,10 @@ export class LoanBookComponent implements OnInit {
     }
     this.getAllBooks();
   }
-  getAllBooks() {   
+  getAllBooks() {
     this.data.getAllBooks(this.bookName).subscribe(
       result => this.books$ = result
-    ) 
+    );
   }
   getAvailabilityText(book: any) {
     if (book.available) {
@@ -33,9 +33,10 @@ export class LoanBookComponent implements OnInit {
       return "Borrowed by " + book.firstName + " " + book.lastName;
     }
   }
-  loanBook(id: number) {
-    this.data.loanBook(id, this.currentUserId).subscribe(result => {
-      if (result.status == 201) {
+    loanBook(id: number) {
+    const loan = { bookId: id, userId: this.currentUserId };
+    this.data.loanBook(loan).subscribe(result => {
+      if (result.status === 201) {
         this.getAllBooks();
       }    
     });

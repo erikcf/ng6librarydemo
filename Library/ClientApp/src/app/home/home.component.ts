@@ -25,12 +25,8 @@ export class HomeComponent implements OnInit {
   }
 
   logInUser() {    
-    this.data.logInUser(this.inputEmail, this.inputPassword).subscribe(result => {       
-      if (result == null) {
-        this.isLoginFailed = true;
-        return;
-      }
-      this.user = result as IUser;
+    this.data.logInUser(this.inputEmail, this.inputPassword).subscribe(result => {
+      this.user = result.body as IUser;
       this.currentUser = this.user.email;
       this.storage.set('currentUser', this.user.email);
       this.storage.set('currentFirstName', this.user.firstName);
@@ -38,6 +34,8 @@ export class HomeComponent implements OnInit {
       this.storage.set('currentId', this.user.userId);
       this.isLoginFailed = false;
       this.getLoanInfo();
+    }, (): void => {
+        this.isLoginFailed = true;
     });
   }
 
@@ -56,8 +54,9 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  returnBook(id: number) {
-    this.data.returnBook(id).subscribe(result => {
+    returnBook(id: number) {
+      const loan = { active: false };
+      this.data.returnBook(id, loan).subscribe(result => {
       this.getLoanInfo();
     });    
   }

@@ -13,7 +13,7 @@ export class CreateBookComponent {
   bookFailed: boolean = false;
   constructor(private data: DataService) {}
   createBook() {
-    let book = { name: this.name };
+    const book = { name: this.name };
     this.data.createBook(book).subscribe(result => {
       if (result.status === 201) {
         this.bookCreated = true;
