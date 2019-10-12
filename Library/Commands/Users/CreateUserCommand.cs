@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Library.Logic;
+using Library.Helpers;
 using Library.Models;
 
 namespace Library.Commands.Users
@@ -19,7 +19,7 @@ namespace Library.Commands.Users
                 FirstName = FirstName,
                 LastName = LastName,
                 Email = Email,
-                Password = Password
+                Password = PasswordManager.HashPassword(Password)
             };
             await context.Users.AddAsync(user);
             await context.SaveChangesAsync();

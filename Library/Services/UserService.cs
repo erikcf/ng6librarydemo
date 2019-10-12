@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Library.Dto;
+using Library.Helpers;
 using Library.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +14,10 @@ namespace Library.Services
             _context = context;
         }
 
-        public async Task<User> GetUserAsync(string email, string password) 
-            => await _context.Users.FirstOrDefaultAsync(user => user.Email == email && user.Password == password);
+        public async Task<User> GetUserAsync(string email, string password)
+        {
+            var hashedPassword = PasswordManager.HashPassword(password);
+            return await _context.Users.FirstOrDefaultAsync(user => user.Email == email && user.Password == hashedPassword);
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Library.Logic
+namespace Library.Helpers
 {
     public static class ErrorHelper
     {
