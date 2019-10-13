@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Library.Domain.Models;
 using Library.Helpers;
-using Library.Models;
 
 namespace Library.Commands.Users
 {

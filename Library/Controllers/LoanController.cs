@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Library.Commands;
-using Library.Dto;
+using Library.Dtos;
 using Library.RequestModels;
 using Library.Services;
 using Microsoft.AspNetCore.Mvc;

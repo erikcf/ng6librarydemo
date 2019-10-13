@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Library.Models;
+using Library.Domain.Models;
 
 namespace Library.Services
 {

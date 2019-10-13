@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Library.Models;
+using Library.Domain.Models;
 
 namespace Library.Commands.Loans
 {

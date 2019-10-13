@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Library.Dto;
-using Library.Models;
+using Library.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Services
@@ -20,24 +18,15 @@ namespace Library.Services
 
         public async Task<IList<Book>> GetAllBooks(string name)
         {
-            var allBooks = await _context.Books
-                .Include(b => b.Loans)
-                .ThenInclude(l => l.User)
-                .ToListAsync();
+            var allBooks = await _context.Books.ToListAsync();
             if (!string.IsNullOrEmpty(name))
             {
                 allBooks = allBooks.Where(filter => filter.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
             }
-
             return allBooks;
         }
 
-        public async Task<Book> GetBookById(int id)
-        {
-            return await _context.Books
-                .Include(b => b.Loans)
-                .ThenInclude(l => l.User)
-                .FirstOrDefaultAsync(b => b.BookId == id);
-        }
+        public async Task<Book> GetBookById(int id) 
+            => await _context.Books.FirstOrDefaultAsync(b => b.BookId == id);
     }
 }

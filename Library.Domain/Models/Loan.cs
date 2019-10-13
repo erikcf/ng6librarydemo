@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Library.Models
+namespace Library.Domain.Models
 {
     public class Loan
     {
@@ -8,9 +8,9 @@ namespace Library.Models
         public bool Active { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Finished { get; set; }
-        public Book Book { get; set; }
+        public virtual Book Book { get; set; }
         public int BookId { get; set; }
-        public User User { get; set; }
+        public virtual User User { get; set; }
         public int UserId { get; set; }
     }
 }

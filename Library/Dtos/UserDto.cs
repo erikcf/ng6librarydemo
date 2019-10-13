@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Library.Models;
+using Library.Domain.Models;
 
-namespace Library.Dto
+namespace Library.Dtos
 {
     public class UserDto
     {

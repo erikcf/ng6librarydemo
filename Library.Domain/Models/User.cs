@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Library.Models
+namespace Library.Domain.Models
 {
     public class User
     {
@@ -9,6 +9,6 @@ namespace Library.Models
         public string LastName { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
-        public List<Loan> Loans { get; set; }
+        public virtual ICollection<Loan> Loans { get; set; }
     }
 }

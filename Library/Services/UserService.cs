@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
+using Library.Domain.Models;
 using Library.Helpers;
-using Library.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Services

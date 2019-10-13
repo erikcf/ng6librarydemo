@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Library.Domain.Models;
 using Library.Helpers;
-using Library.Models;
 
 namespace Library.Commands.Loans
 {
@@ -18,8 +18,8 @@ namespace Library.Commands.Loans
             {
                 Active = true,
                 Created = DateTime.Now,
-                BookId = BookId,
-                UserId = UserId
+                Book = context.Books.Find(BookId),
+                User = context.Users.Find(UserId)
             };
             await context.Loans.AddAsync(loan);
             await context.SaveChangesAsync();
