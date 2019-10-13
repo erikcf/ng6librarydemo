@@ -17,11 +17,11 @@ namespace Library.Dtos
             return new BookDto
             {
                 BookId = book.BookId,
-                Available = book.Loans.All(loan => !loan.Active) || !book.Loans.Any(),
+                Available = (book.Loans?.All(loan => !loan.Active) ?? true) || (!book.Loans?.Any() ?? true),
                 BookName = book.Name,
-                UserId = book.Loans.FirstOrDefault(loan => loan.Active)?.UserId,
-                FirstName = book.Loans.FirstOrDefault(loan => loan.Active)?.User.FirstName,
-                LastName = book.Loans.FirstOrDefault(loan => loan.Active)?.User.LastName
+                UserId = book.Loans?.FirstOrDefault(loan => loan.Active)?.UserId,
+                FirstName = book.Loans?.FirstOrDefault(loan => loan.Active)?.User.FirstName,
+                LastName = book.Loans?.FirstOrDefault(loan => loan.Active)?.User.LastName
             };
         }
     }

@@ -1,20 +1,68 @@
 <div class="row">
-  <div class="col-6">
-    <h3>Create User</h3>
-      <div class="form-group">
-      <label for="inputFirstName">First name</label>
-      <input type="text" id="inputFirstName" [(ngModel)]="firstName" class="form-control">
-      <label for="inputLastname">Last name</label>
-      <input type="text" id="inputLastname" [(ngModel)]="lastName" class="form-control">
-      <label for="inputEmail">Email address</label>
-      <input type="email" id="inputEmail" [(ngModel)]="email" class="form-control">
-      <label for="inputPassword">Password</label>
-      <input type="password" id="inputPassword" [(ngModel)]="password" class="form-control" (keydown.enter)="createUser()">
-      </div>
-      <button class="btn btn-lg btn-primary btn-block" (click)="createUser()">Create</button>
+  <div class="col-3 mx-auto">
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+      <h3>Create User</h3>
+      <mat-form-field>
+        <input matInput
+               placeholder="First name"
+               formControlName="firstNameFormControl"
+               name="firstName"
+               class="pt-3"
+               type="text" />
+        <mat-error *ngIf="
+              !formGroup.get('firstNameFormControl').valid &&
+              formGroup.get('firstNameFormControl').touched
+            ">
+          Please enter a valid first name
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput
+               placeholder="Last name"
+               formControlName="lastNameFormControl"
+               name="lastName"
+               class="pt-3"
+               type="text" />
+        <mat-error *ngIf="
+              !formGroup.get('lastNameFormControl').valid &&
+              formGroup.get('lastNameFormControl').touched
+            ">
+          Please enter a valid last name
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput
+               placeholder="Email address"
+               formControlName="emailFormControl"
+               name="email"
+               class="pt-3"
+               type="email" />
+        <mat-error *ngIf="
+              !formGroup.get('emailFormControl').valid &&
+              formGroup.get('emailFormControl').touched
+            ">
+          Please enter a valid email address
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput
+               placeholder="Password"
+               formControlName="passwordFormControl"
+               name="password"
+               class="pt-3"
+               type="password" />
+        <mat-error *ngIf="
+              !formGroup.get('passwordFormControl').valid &&
+              formGroup.get('passwordFormControl').touched
+            ">
+          Please enter a valid password
+        </mat-error>
+      </mat-form-field>
+      <button mat-raised-button color="primary" [disabled]="!formGroup.valid" class="mt-3" (keydown.enter)="onSubmit()">
+        Create user
+      </button>
+      <p *ngIf="createSuccess" class="text-success pt-3">User created!</p>
+      <p *ngIf="createFailed" class="text-danger pt-3">User not created!</p>
+    </form>
   </div>
-</div>
-<div class="row mt-2">
-  <span *ngIf="createFailed" class="text-danger">Create user failed!</span>
-  <span *ngIf="createSuccess" class="text-success">User created!</span>
 </div>

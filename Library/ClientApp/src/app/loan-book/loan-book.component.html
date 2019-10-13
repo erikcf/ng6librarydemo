@@ -1,12 +1,27 @@
 <div class="row">
-  <div class="col-12">
+  <div class="col-3 mx-auto">
     <h3>Search book</h3>
-  </div>
-  <div class="col-6">
-    <div class="form-group">
-      <label for="name">Name</label>
-      <input type="text" class="form-control" id="name" [(ngModel)]="bookName" (keyup)="searchBooks()">
-    </div>
+    <form [formGroup]="formGroup" (ngSubmit)="getAllBooks()">
+      <mat-form-field>
+        <input matInput
+               placeholder="Name"
+               formControlName="nameFormControl"
+               name="name"
+               class="pt-3"
+               type="text"
+               (keyup)="searchBook()"
+               (keydown.enter)="getAllBooks()"/>
+        <mat-error *ngIf="
+              !formGroup.get('nameFormControl').valid &&
+              formGroup.get('nameFormControl').touched
+            ">
+          Please enter a search term
+        </mat-error>
+      </mat-form-field>
+      <button mat-raised-button color="primary" [disabled]="!formGroup.valid" class="mt-3">
+        Search book
+      </button>
+    </form>
   </div>
 </div>
 
@@ -18,7 +33,6 @@
     <table class="table table-hover">
       <thead>
         <tr>
-          <th>Id</th>
           <th>Name</th>
           <th>Availability</th>
           <th>Loan book</th>
@@ -27,7 +41,6 @@
       </thead>
       <tbody>
         <tr *ngFor="let book of books$">
-          <td>{{ book.bookId }}</td>
           <td>{{ book.bookName }}</td>
           <td>{{ getAvailabilityText(book) }}</td>
           <td class="mouse-icon-hover" *ngIf="book.available">

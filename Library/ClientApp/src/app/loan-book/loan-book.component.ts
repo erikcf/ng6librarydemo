@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { SESSION_STORAGE, WebStorageService } from 'angular-webstorage-service';
 import { DataService } from '../data.service';
 import { Observable } from 'rxjs';
+import { FormControl, Validators, FormGroup } from "@angular/forms";
 
 @Component({
     selector: 'app-loan-book',
@@ -9,9 +10,11 @@ import { Observable } from 'rxjs';
     styleUrls: ['./loan-book.component.scss']
 })
 export class LoanBookComponent implements OnInit {
-    bookName: string = "";
-    currentUserId: string = "";
+  currentUserId: string = "";
     books$: Object;
+    formGroup = new FormGroup({
+      nameFormControl: new FormControl("", [Validators.required])
+    });
 
     constructor(@Inject(SESSION_STORAGE) private storage: WebStorageService, private data: DataService) { }
 
@@ -22,12 +25,12 @@ export class LoanBookComponent implements OnInit {
         this.getAllBooks();
     }
     getAllBooks() {
-        this.data.getAllBooks(this.bookName).subscribe(
+        this.data.getAllBooks(this.formGroup.get("nameFormControl").value).subscribe(
             result => this.books$ = result
         );
     }
-    searchBooks() {
-        if (this.bookName.length > 2) {
+    searchBook() {
+        if (this.formGroup.get("nameFormControl").value.length > 2) {
             this.getAllBooks();
         }
     }
