@@ -29,10 +29,10 @@ namespace Library.Commands.Users
         public IEnumerable<string> Validate(User nullEntity, LibraryContext context)
         {
             var errors = new List<string>();
-            ErrorHelper.AddError(errors, nameof(FirstName));
-            ErrorHelper.AddError(errors, nameof(LastName));
-            ErrorHelper.AddError(errors, nameof(Email));
-            ErrorHelper.AddError(errors, nameof(Password));
+            errors.AddError(nameof(FirstName));
+            errors.AddError(nameof(LastName));
+            errors.AddError(nameof(Email));
+            errors.AddError(nameof(Password));
             return errors;
         }
     }

@@ -29,8 +29,8 @@ namespace Library.Commands.Loans
         public IEnumerable<string> Validate(Loan nullEntity, LibraryContext context)
         {
             var errors = new List<string>();
-            ErrorHelper.AddError(errors, nameof(UserId));
-            ErrorHelper.AddError(errors, nameof(BookId));
+            errors.AddError(nameof(UserId));
+            errors.AddError(nameof(BookId));
             if (!context.Books.Any(book => book.BookId == BookId))
             {
                 errors.Add($"Book not found with id {BookId}");

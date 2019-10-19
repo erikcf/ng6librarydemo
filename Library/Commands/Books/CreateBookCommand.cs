@@ -23,7 +23,7 @@ namespace Library.Commands.Books
         public IEnumerable<string> Validate(Book entity, LibraryContext context)
         {
             var errors = new List<string>();
-            ErrorHelper.AddError(errors, nameof(Name));
+            errors.AddError(nameof(Name));
             return errors;
         }
     }
