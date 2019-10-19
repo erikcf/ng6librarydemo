@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using Library.Domain.Models;
 
 namespace Library.Dtos
 {
-    public class LoanDto : IValidationError
+    public class LoanDto : BaseDto
     {
         public int LoanId { get; set; }
         public bool Active { get; set; }
@@ -29,8 +27,5 @@ namespace Library.Dtos
                 FullName = $"{loan.User?.FirstName} {loan.User?.LastName}"
             };
         }
-
-        [JsonIgnore]
-        public IEnumerable<string> ValidationErrors { get; set; } = new List<string>();
     }
 }
