@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Library.Domain.Models;
+using Library.Dtos;
+using Library.RequestModels;
 
 namespace Library.Services
 {
     public interface IBookService
     {
-        Task<IList<Book>> GetAllBooks(string name);
-        Task<Book> GetBookById(int id);
+        Task<IEnumerable<BookDto>> GetAllBooksAsync(string name);
+        Task<BookDto> GetBookByIdAsync(int id);
+        Task<BookDto> CreateBookAsync(BookRequestModel bookRequestModel);
     }
 }

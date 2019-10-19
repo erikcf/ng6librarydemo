@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Library.Commands;
 using Library.Domain.Models;
+using Library.Dtos;
+using Library.RequestModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Services
@@ -9,26 +12,64 @@ namespace Library.Services
     public class LoanService : ILoanService
     {
         private readonly LibraryContext _context;
+        private readonly CommandRunner _commandRunner;
 
-        public LoanService(LibraryContext context)
+        public LoanService(LibraryContext context, CommandRunner commandRunner)
         {
             _context = context;
+            _commandRunner = commandRunner;
         }
 
-        public async Task<Loan> GetLoanByIdAsync(int id) 
-            => await _context.Loans.FirstOrDefaultAsync(loan => loan.LoanId == id);
+        public async Task<LoanDto> GetLoanByIdAsync(int id)
+        {
+            var loanEntity = await _context.Loans.FirstOrDefaultAsync(loan => loan.LoanId == id);
+            return LoanDto.FromLoanDto(loanEntity);
+        }
 
-        public async Task<IList<Loan>> GetLoansForBookByIdAsync(int id) =>
-            await _context.Loans
+        public async Task<IEnumerable<LoanDto>> GetLoansForBookByIdAsync(int id)
+        {
+            var loans = await _context.Loans
                 .Where(b => b.BookId == id)
                 .OrderByDescending(loan => loan.Active)
                 .ToListAsync();
+            return loans.Select(LoanDto.FromLoanDto);
+        }
 
-        public async Task<IList<Loan>> GetLoansByUserIdAsync(int id) =>
-            await _context.Loans
+        public async Task<IEnumerable<LoanDto>> GetLoansByUserIdAsync(int id)
+        {
+            var loans = await _context.Loans
                 .Where(user => user.UserId == id)
                 .OrderByDescending(act => act.Active)
                 .ThenByDescending(date => date.Finished)
                 .ToListAsync();
+            return loans.Select(LoanDto.FromLoanDto);
+        }
+
+        public async Task<LoanDto> CreateLoanAsync(CreateLoanRequestModel createLoanRequestModel)
+        {
+            var command = createLoanRequestModel.ToCommand();
+            var validationErrors = _commandRunner.Validate(command, null);
+            if (validationErrors.Any())
+            {
+                return new LoanDto { ValidationErrors = validationErrors };
+            }
+            var id = await _commandRunner.Execute(command, null);
+            return await GetLoanByIdAsync(id);
+        }
+
+        public async Task<LoanDto> UpdateLoanAsync(int id, UpdateLoanRequestModel updateLoanRequestModel)
+        {
+            var loan = await _context.Loans.FirstOrDefaultAsync(loan => loan.LoanId == id);
+            if (loan is null) { return null; }
+
+            var command = updateLoanRequestModel.ToCommand();
+            var validationErrors = _commandRunner.Validate(command, loan);
+            if (validationErrors.Any())
+            {
+                return new LoanDto { ValidationErrors = validationErrors };
+            }
+            await _commandRunner.Execute(command, loan);
+            return LoanDto.FromLoanDto(loan);
+        }
     }
 }

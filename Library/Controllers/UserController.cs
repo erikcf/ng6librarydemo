@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Library.Commands;
 using Library.Dtos;
 using Library.RequestModels;
 using Library.Services;
@@ -12,12 +11,10 @@ namespace Library.Controllers
     public class UserController : Controller
     {
         private readonly IUserService _userService;
-        private readonly CommandRunner _commandRunner;
 
-        public UserController(IUserService userService, CommandRunner commandRunner)
+        public UserController(IUserService userService)
         {
             _userService = userService;
-            _commandRunner = commandRunner;
         }
 
         [HttpGet("[action]")]
@@ -27,26 +24,34 @@ namespace Library.Controllers
         {
             var user = await _userService.GetUserAsync(email, password);
             if (user is null) { return NotFound(); }
-            return Ok(UserDto.FromUser(user));
+            return Ok(user);
         }
 
-
         [HttpPost("[action]")]
-        [ProducesResponseType(201)]
+        [ProducesResponseType(typeof(UserDto), 201)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> CreateUser([FromBody] UserRequestModel userRequestModel)
         {
             if (!ModelState.IsValid) { return BadRequest(); }
 
-            var command = userRequestModel.ToCommand();
-            var validationErrors = _commandRunner.Validate(command, null);
-            if (validationErrors.Any())
+            var userDto = await _userService.CreateUserAsync(userRequestModel);
+
+            if (userDto.ValidationErrors.Any())
             {
-                return BadRequest(validationErrors);
+                return BadRequest(userDto.ValidationErrors);
             }
 
-            var id = await _commandRunner.Execute(command, null);
-            return Created("GetUserById", id);
+            return CreatedAtAction(nameof(GetUserById), new { id = userDto.UserId }, userDto);
+        }
+
+        [HttpGet("[action]/{id}")]
+        [ProducesResponseType(typeof(UserDto), 200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetUserById([FromRoute] int id)
+        {
+            var userDto = await _userService.GetUserByIdAsync(id);
+            if (userDto is null) { return NotFound(); }
+            return Ok(userDto);
         }
     }
 }

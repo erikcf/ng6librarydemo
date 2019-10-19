@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Library.Commands;
 using Library.Dtos;
 using Library.RequestModels;
 using Library.Services;
@@ -12,12 +11,10 @@ namespace Library.Controllers
     public class LoanController : Controller
     {
         private readonly ILoanService _loanService;
-        private readonly CommandRunner _commandRunner;
 
-        public LoanController(ILoanService loanService, CommandRunner commandRunner)
+        public LoanController(ILoanService loanService)
         {
             _loanService = loanService;
-            _commandRunner = commandRunner;
         }
 
         [HttpGet("[action]/{id}")]
@@ -25,12 +22,9 @@ namespace Library.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetLoanById([FromRoute] int id)
         {
-            var loan = await _loanService.GetLoanByIdAsync(id);
-            if (loan is null)
-            {
-                return NotFound();
-            }
-            return Ok(LoanDto.FromLoanDto(loan));
+            var loanDto = await _loanService.GetLoanByIdAsync(id);
+            if (loanDto is null) { return NotFound(); }
+            return Ok(loanDto);
         }
 
         [HttpGet("[action]/{id}")]
@@ -38,9 +32,9 @@ namespace Library.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetLoansByUserId([FromRoute] int id)
         {
-            var loans = await _loanService.GetLoansByUserIdAsync(id);
-            if (!loans.Any()) { return NotFound(); }
-            return Ok(loans.Select(LoanDto.FromLoanDto));
+            var loanDtos = await _loanService.GetLoansByUserIdAsync(id);
+            if (!loanDtos.Any()) { return NotFound(); }
+            return Ok(loanDtos);
         }
 
         [HttpGet("[action]/{id}")]
@@ -48,52 +42,44 @@ namespace Library.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetLoansForBookById([FromRoute] int id)
         {
-            var loans = await _loanService.GetLoansForBookByIdAsync(id);
-            if (!loans.Any())
-            {
-                return NotFound();
-            }
-            return Ok(loans.Select(LoanDto.FromLoanDto));
+            var loanDtos = await _loanService.GetLoansForBookByIdAsync(id);
+            if (!loanDtos.Any()) { return NotFound(); }
+            return Ok(loanDtos);
         }
 
         [HttpPost("[action]")]
-        [ProducesResponseType(201)]
+        [ProducesResponseType(typeof(LoanDto),201)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> CreateLoan([FromBody] CreateLoanRequestModel createLoanRequestModel)
         {
             if (!ModelState.IsValid) { return BadRequest(); }
 
-            var command = createLoanRequestModel.ToCommand();
-            var validationErrors = _commandRunner.Validate(command, null);
-            if (validationErrors.Any())
+            var loanDto = await _loanService.CreateLoanAsync(createLoanRequestModel);
+
+            if (loanDto.ValidationErrors.Any())
             {
-                return BadRequest(validationErrors);
+                return BadRequest(loanDto.ValidationErrors);
             }
 
-            var id = await _commandRunner.Execute(command, null);
-            return CreatedAtAction(nameof(GetLoanById), new { id }, 
-                LoanDto.FromLoanDto(await _loanService.GetLoanByIdAsync(id)));
+            return CreatedAtAction(nameof(GetLoanById), new { id = loanDto.LoanId }, loanDto);
         }
 
         [HttpPut("[action]/{id}")]
         [ProducesResponseType(typeof(LoanDto), 200)]
         [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> UpdateLoan([FromRoute] int id, [FromBody] UpdateLoanRequestModel updateLoanRequestModel)
         {
             if (!ModelState.IsValid) { return BadRequest(); }
 
-            var loan = await _loanService.GetLoanByIdAsync(id);
-            if (loan is null) { return NotFound(); }
-
-            var command = updateLoanRequestModel.ToCommand();
-            var validationErrors = _commandRunner.Validate(command, loan);
-            if (validationErrors.Any())
+            var loanDto = await _loanService.UpdateLoanAsync(id, updateLoanRequestModel);
+            if (loanDto is null) { return NotFound(); }
+            if (loanDto.ValidationErrors.Any())
             {
-                return BadRequest(validationErrors);
+                return BadRequest(loanDto.ValidationErrors);
             }
-            await _commandRunner.Execute(command, loan);
 
-            return Ok(LoanDto.FromLoanDto(loan));
+            return Ok(loanDto);
         }
     }
 }

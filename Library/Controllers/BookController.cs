@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Library.Commands;
 using Library.Dtos;
 using Library.RequestModels;
 using Library.Services;
@@ -12,12 +11,10 @@ namespace Library.Controllers
     public class BookController : Controller
     {
         private readonly IBookService _bookService;
-        private readonly CommandRunner _commandRunner;
 
-        public BookController(IBookService bookService, CommandRunner commandRunner)
+        public BookController(IBookService bookService)
         {
             _bookService = bookService;
-            _commandRunner = commandRunner;
         }
 
         [HttpPost("[action]")]
@@ -25,25 +22,24 @@ namespace Library.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> CreateBook([FromBody] BookRequestModel bookRequestModel)
         {
-            if(!ModelState.IsValid) { return BadRequest(); }
+            if (!ModelState.IsValid) { return BadRequest(); }
 
-            var command = bookRequestModel.ToCommand();
-            var validationErrors = _commandRunner.Validate(command, null);
-            if (validationErrors.Any())
+            var bookDto = await _bookService.CreateBookAsync(bookRequestModel);
+
+            if (bookDto.ValidationErrors.Any())
             {
-                return BadRequest(validationErrors);
+                return BadRequest(bookDto.ValidationErrors);
             }
-
-            var id = await _commandRunner.Execute(command, null);
-            return CreatedAtAction(nameof(GetBookById),new { id },BookDto.FromBook(await _bookService.GetBookById(id)));
+ 
+            return CreatedAtAction(nameof(GetBookById),new { id = bookDto.BookId },bookDto);
         }
 
         [HttpGet("[action]")]
         [ProducesResponseType(typeof(BookDto), 200)]
         public async Task<IActionResult> GetAllBooks([FromQuery] string name)
         {
-            var books = await _bookService.GetAllBooks(name);
-            return Ok(books.Select(BookDto.FromBook));
+            var books = await _bookService.GetAllBooksAsync(name);
+            return Ok(books);
         }
 
         [HttpGet("[action]/{id}")]
@@ -51,9 +47,9 @@ namespace Library.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetBookById([FromRoute] int id)
         {
-            var book = await _bookService.GetBookById(id);
-            if (book is null) { return NotFound(); }
-            return Ok(BookDto.FromBook(book));
+            var bookDto = await _bookService.GetBookByIdAsync(id);
+            if (bookDto is null) { return NotFound(); }
+            return Ok(bookDto);
         }
     }
 }
