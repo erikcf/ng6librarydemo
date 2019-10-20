@@ -54,14 +54,14 @@ namespace Library.Controllers
         {
             if (!ModelState.IsValid) { return BadRequest(); }
 
-            var loanDto = await _loanService.CreateLoanAsync(createLoanRequestModel);
+            var loanResult = await _loanService.CreateLoanAsync(createLoanRequestModel);
 
-            if (loanDto.ValidationErrors.Any())
+            if (loanResult.HasErrors())
             {
-                return BadRequest(loanDto.ValidationErrors);
+                return BadRequest(loanResult.ValidationErrors);
             }
 
-            return CreatedAtAction(nameof(GetLoanById), new { id = loanDto.LoanId }, loanDto);
+            return CreatedAtAction(nameof(GetLoanById), new { id = loanResult.LoanDto.LoanId }, loanResult.LoanDto);
         }
 
         [HttpPut("[action]/{id}")]
@@ -72,14 +72,14 @@ namespace Library.Controllers
         {
             if (!ModelState.IsValid) { return BadRequest(); }
 
-            var loanDto = await _loanService.UpdateLoanAsync(id, updateLoanRequestModel);
-            if (loanDto is null) { return NotFound(); }
-            if (loanDto.ValidationErrors.Any())
+            var loanResult = await _loanService.UpdateLoanAsync(id, updateLoanRequestModel);
+            if (loanResult is null) { return NotFound(); }
+            if (loanResult.HasErrors())
             {
-                return BadRequest(loanDto.ValidationErrors);
+                return BadRequest(loanResult.ValidationErrors);
             }
 
-            return Ok(loanDto);
+            return Ok(loanResult.LoanDto);
         }
     }
 }

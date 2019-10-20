@@ -5,3 +5,4 @@ F:\git\libraryproject\Library.Domain\obj\Debug\netstandard2.1\Library.Domain.Ass
 F:\git\libraryproject\Library.Domain\bin\Debug\netstandard2.1\Library.Domain.pdb
 F:\git\libraryproject\Library.Domain\obj\Debug\netstandard2.1\Library.Domain.dll
 F:\git\libraryproject\Library.Domain\obj\Debug\netstandard2.1\Library.Domain.pdb
+F:\git\libraryproject\Library.Domain\obj\Debug\netstandard2.1\Library.Domain.csprojAssemblyReference.cache

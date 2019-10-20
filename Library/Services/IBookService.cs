@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Library.Dtos;
 using Library.RequestModels;
+using Library.Results;
 
 namespace Library.Services
 {
@@ -9,6 +10,6 @@ namespace Library.Services
     {
         Task<IEnumerable<BookDto>> GetAllBooksAsync(string name);
         Task<BookDto> GetBookByIdAsync(int id);
-        Task<BookDto> CreateBookAsync(BookRequestModel bookRequestModel);
+        Task<BookResult> CreateBookAsync(BookRequestModel bookRequestModel);
     }
 }

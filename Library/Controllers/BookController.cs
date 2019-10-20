@@ -24,14 +24,14 @@ namespace Library.Controllers
         {
             if (!ModelState.IsValid) { return BadRequest(); }
 
-            var bookDto = await _bookService.CreateBookAsync(bookRequestModel);
+            var result = await _bookService.CreateBookAsync(bookRequestModel);
 
-            if (bookDto.ValidationErrors.Any())
+            if (result.HasErrors())
             {
-                return BadRequest(bookDto.ValidationErrors);
+                return BadRequest(result.ValidationErrors);
             }
  
-            return CreatedAtAction(nameof(GetBookById),new { id = bookDto.BookId },bookDto);
+            return CreatedAtAction(nameof(GetBookById),new { id = result.BookDto.BookId },result.BookDto);
         }
 
         [HttpGet("[action]")]

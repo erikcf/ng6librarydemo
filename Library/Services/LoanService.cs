@@ -5,6 +5,7 @@ using Library.Commands;
 using Library.Domain.Models;
 using Library.Dtos;
 using Library.RequestModels;
+using Library.Results;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Services
@@ -45,19 +46,20 @@ namespace Library.Services
             return loans.Select(LoanDto.FromLoanDto);
         }
 
-        public async Task<LoanDto> CreateLoanAsync(CreateLoanRequestModel createLoanRequestModel)
+        public async Task<LoanResult> CreateLoanAsync(CreateLoanRequestModel createLoanRequestModel)
         {
             var command = createLoanRequestModel.ToCommand();
             var validationErrors = _commandRunner.Validate(command, null);
             if (validationErrors.Any())
             {
-                return new LoanDto { ValidationErrors = validationErrors };
+                return new LoanResult { ValidationErrors = validationErrors };
             }
             var id = await _commandRunner.Execute(command, null);
-            return await GetLoanByIdAsync(id);
+            var loanDto = await GetLoanByIdAsync(id);
+            return new LoanResult { LoanDto = loanDto };
         }
 
-        public async Task<LoanDto> UpdateLoanAsync(int id, UpdateLoanRequestModel updateLoanRequestModel)
+        public async Task<LoanResult> UpdateLoanAsync(int id, UpdateLoanRequestModel updateLoanRequestModel)
         {
             var loan = await _context.Loans.FirstOrDefaultAsync(loan => loan.LoanId == id);
             if (loan is null) { return null; }
@@ -66,10 +68,11 @@ namespace Library.Services
             var validationErrors = _commandRunner.Validate(command, loan);
             if (validationErrors.Any())
             {
-                return new LoanDto { ValidationErrors = validationErrors };
+                return new LoanResult { ValidationErrors = validationErrors };
             }
             await _commandRunner.Execute(command, loan);
-            return LoanDto.FromLoanDto(loan);
+            var loanDto = LoanDto.FromLoanDto(loan);
+            return new LoanResult { LoanDto = loanDto };
         }
     }
 }

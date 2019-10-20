@@ -34,14 +34,14 @@ namespace Library.Controllers
         {
             if (!ModelState.IsValid) { return BadRequest(); }
 
-            var userDto = await _userService.CreateUserAsync(userRequestModel);
+            var result = await _userService.CreateUserAsync(userRequestModel);
 
-            if (userDto.ValidationErrors.Any())
+            if (result.HasErrors())
             {
-                return BadRequest(userDto.ValidationErrors);
+                return BadRequest(result.ValidationErrors);
             }
 
-            return CreatedAtAction(nameof(GetUserById), new { id = userDto.UserId }, userDto);
+            return CreatedAtAction(nameof(GetUserById), new { id = result.UserDto.UserId }, result.UserDto);
         }
 
         [HttpGet("[action]/{id}")]

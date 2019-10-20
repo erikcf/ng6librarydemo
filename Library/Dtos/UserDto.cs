@@ -4,7 +4,7 @@ using Library.Domain.Models;
 
 namespace Library.Dtos
 {
-    public class UserDto : BaseDto
+    public class UserDto
     {
         public int UserId { get; set; }
         public string FirstName { get; set; }

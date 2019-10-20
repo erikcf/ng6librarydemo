@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Library.Dtos;
 using Library.RequestModels;
+using Library.Results;
 
 namespace Library.Services
 {
@@ -10,7 +11,7 @@ namespace Library.Services
         Task<LoanDto> GetLoanByIdAsync(int id);
         Task<IEnumerable<LoanDto>> GetLoansForBookByIdAsync(int id);
         Task<IEnumerable<LoanDto>> GetLoansByUserIdAsync(int id);
-        Task<LoanDto> CreateLoanAsync(CreateLoanRequestModel createLoanRequestModel);
-        Task<LoanDto> UpdateLoanAsync(int id, UpdateLoanRequestModel updateLoanRequestModel);
+        Task<LoanResult> CreateLoanAsync(CreateLoanRequestModel createLoanRequestModel);
+        Task<LoanResult> UpdateLoanAsync(int id, UpdateLoanRequestModel updateLoanRequestModel);
     }
 }

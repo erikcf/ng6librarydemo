@@ -3,7 +3,7 @@ using Library.Domain.Models;
 
 namespace Library.Dtos
 {
-    public class LoanDto : BaseDto
+    public class LoanDto
     {
         public int LoanId { get; set; }
         public bool Active { get; set; }

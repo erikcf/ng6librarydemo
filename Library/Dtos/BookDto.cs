@@ -3,7 +3,7 @@ using Library.Domain.Models;
 
 namespace Library.Dtos
 {
-    public class BookDto : BaseDto
+    public class BookDto
     {
         public int BookId { get; set; }
         public string BookName { get; set; }

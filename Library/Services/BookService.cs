@@ -6,6 +6,7 @@ using Library.Commands;
 using Library.Domain.Models;
 using Library.Dtos;
 using Library.RequestModels;
+using Library.Results;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Services
@@ -37,16 +38,17 @@ namespace Library.Services
             return book is null ? null : BookDto.FromBook(book);
         }
 
-        public async Task<BookDto> CreateBookAsync(BookRequestModel bookRequestModel)
+        public async Task<BookResult> CreateBookAsync(BookRequestModel bookRequestModel)
         {
             var command = bookRequestModel.ToCommand();
             var validationErrors = _commandRunner.Validate(command, null);
             if (validationErrors.Any())
             {
-                return new BookDto { ValidationErrors = validationErrors };
+                return new BookResult { ValidationErrors = validationErrors };
             }
             var id = await _commandRunner.Execute(command, null);
-            return await GetBookByIdAsync(id);
+            var bookDto = await GetBookByIdAsync(id);
+            return new BookResult { BookDto = bookDto };
         }
     }
 }
