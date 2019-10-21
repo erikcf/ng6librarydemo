@@ -26,7 +26,7 @@ namespace Library.Commands.Loans
             Result = loan.LoanId;
         }
 
-        public IEnumerable<string> Validate(Loan nullEntity, LibraryContext context)
+        public IList<string> Validate(Loan nullEntity, LibraryContext context)
         {
             var errors = new List<string>();
             errors.AddError(nameof(UserId));

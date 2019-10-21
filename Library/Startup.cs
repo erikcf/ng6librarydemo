@@ -27,7 +27,7 @@ namespace Library
             services.AddTransient<IBookService, BookService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ILoanService, LoanService>();
-            services.AddTransient<CommandRunner>();
+            services.AddTransient<ICommandRunner, CommandRunner>();
             services.AddMvc();
             services.AddControllers();
             services.AddDbContext<LibraryContext>(options => options

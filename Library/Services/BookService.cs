@@ -14,9 +14,9 @@ namespace Library.Services
     public class BookService : IBookService
     {
         private readonly LibraryContext _context;
-        private readonly CommandRunner _commandRunner;
+        private readonly ICommandRunner _commandRunner;
 
-        public BookService(LibraryContext context, CommandRunner commandRunner)
+        public BookService(LibraryContext context, ICommandRunner commandRunner)
         {
             _context = context;
             _commandRunner = commandRunner;

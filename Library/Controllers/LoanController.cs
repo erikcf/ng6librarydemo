@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using Library.Dtos;
 using Library.RequestModels;
@@ -54,14 +55,17 @@ namespace Library.Controllers
         {
             if (!ModelState.IsValid) { return BadRequest(); }
 
-            var loanResult = await _loanService.CreateLoanAsync(createLoanRequestModel);
-
-            if (loanResult.HasErrors())
+            try
             {
-                return BadRequest(loanResult.ValidationErrors);
-            }
+                var loanResult = await _loanService.CreateLoanAsync(createLoanRequestModel);
+                if (loanResult.HasErrors()) { return BadRequest(loanResult.ValidationErrors); }
 
-            return CreatedAtAction(nameof(GetLoanById), new { id = loanResult.LoanDto.LoanId }, loanResult.LoanDto);
+                return CreatedAtAction(nameof(GetLoanById), new { id = loanResult.LoanDto.LoanId }, loanResult.LoanDto);
+            }
+            catch (ValidationException validationException)
+            {
+                return StatusCode(500, validationException.Message);
+            }
         }
 
         [HttpPut("[action]/{id}")]
@@ -72,14 +76,18 @@ namespace Library.Controllers
         {
             if (!ModelState.IsValid) { return BadRequest(); }
 
-            var loanResult = await _loanService.UpdateLoanAsync(id, updateLoanRequestModel);
-            if (loanResult is null) { return NotFound(); }
-            if (loanResult.HasErrors())
+            try
             {
-                return BadRequest(loanResult.ValidationErrors);
-            }
+                var loanResult = await _loanService.UpdateLoanAsync(id, updateLoanRequestModel);
+                if (loanResult is null) { return NotFound(); }
+                if (loanResult.HasErrors()) { return BadRequest(loanResult.ValidationErrors); }
 
-            return Ok(loanResult.LoanDto);
+                return Ok(loanResult.LoanDto);
+            }
+            catch (ValidationException validationException)
+            {
+                return StatusCode(500, validationException.Message);
+            }
         }
     }
 }

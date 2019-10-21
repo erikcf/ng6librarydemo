@@ -19,9 +19,9 @@ namespace Library.Commands.Loans
             }
         }
 
-        public IEnumerable<string> Validate(Loan loanDto, LibraryContext context)
+        public IList<string> Validate(Loan loanDto, LibraryContext context)
         {
-            return Enumerable.Empty<string>();
+            return new List<string>();
         }
     }
 }

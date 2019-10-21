@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using Library.Dtos;
 using Library.RequestModels;
@@ -30,18 +31,22 @@ namespace Library.Controllers
         [HttpPost("[action]")]
         [ProducesResponseType(typeof(UserDto), 201)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
         public async Task<IActionResult> CreateUser([FromBody] UserRequestModel userRequestModel)
         {
             if (!ModelState.IsValid) { return BadRequest(); }
 
-            var result = await _userService.CreateUserAsync(userRequestModel);
-
-            if (result.HasErrors())
+            try
             {
-                return BadRequest(result.ValidationErrors);
-            }
+                var result = await _userService.CreateUserAsync(userRequestModel);
+                if (result.HasErrors()) { return BadRequest(result.ValidationErrors); }
 
-            return CreatedAtAction(nameof(GetUserById), new { id = result.UserDto.UserId }, result.UserDto);
+                return CreatedAtAction(nameof(GetUserById), new { id = result.UserDto.UserId }, result.UserDto);
+            }
+            catch (ValidationException validationException)
+            {
+                return StatusCode(500, validationException.Message);
+            }
         }
 
         [HttpGet("[action]/{id}")]

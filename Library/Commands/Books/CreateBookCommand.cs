@@ -20,7 +20,7 @@ namespace Library.Commands.Books
             Result = book.BookId;
         }
 
-        public IEnumerable<string> Validate(Book entity, LibraryContext context)
+        public IList<string> Validate(Book entity, LibraryContext context)
         {
             var errors = new List<string>();
             errors.AddError(nameof(Name));

@@ -7,7 +7,7 @@ namespace Library.Commands
     public interface ICommand<in TEntity>
     {
         Task Execute(TEntity entity, LibraryContext context);
-        IEnumerable<string> Validate(TEntity entity, LibraryContext context);
+        IList<string> Validate(TEntity entity, LibraryContext context);
     }
 
     public interface ICommand<in TEntity, out TResult> : ICommand<TEntity>

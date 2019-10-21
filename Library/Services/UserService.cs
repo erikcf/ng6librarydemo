@@ -13,9 +13,9 @@ namespace Library.Services
     public class UserService : IUserService
     {
         private readonly LibraryContext _context;
-        private readonly CommandRunner _commandRunner;
+        private readonly ICommandRunner _commandRunner;
 
-        public UserService(LibraryContext context, CommandRunner commandRunner)
+        public UserService(LibraryContext context, ICommandRunner commandRunner)
         {
             _context = context;
             _commandRunner = commandRunner;

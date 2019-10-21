@@ -26,7 +26,7 @@ namespace Library.Commands.Users
             Result = user.UserId;
         }
 
-        public IEnumerable<string> Validate(User nullEntity, LibraryContext context)
+        public IList<string> Validate(User nullEntity, LibraryContext context)
         {
             var errors = new List<string>();
             errors.AddError(nameof(FirstName));

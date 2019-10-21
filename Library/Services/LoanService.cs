@@ -13,9 +13,9 @@ namespace Library.Services
     public class LoanService : ILoanService
     {
         private readonly LibraryContext _context;
-        private readonly CommandRunner _commandRunner;
+        private readonly ICommandRunner _commandRunner;
 
-        public LoanService(LibraryContext context, CommandRunner commandRunner)
+        public LoanService(LibraryContext context, ICommandRunner commandRunner)
         {
             _context = context;
             _commandRunner = commandRunner;

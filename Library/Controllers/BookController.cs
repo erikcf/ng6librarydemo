@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Library.Dtos;
@@ -20,18 +21,22 @@ namespace Library.Controllers
         [HttpPost("[action]")]
         [ProducesResponseType(typeof(BookDto), 201)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
         public async Task<IActionResult> CreateBook([FromBody] BookRequestModel bookRequestModel)
         {
             if (!ModelState.IsValid) { return BadRequest(); }
 
-            var result = await _bookService.CreateBookAsync(bookRequestModel);
-
-            if (result.HasErrors())
+            try
             {
-                return BadRequest(result.ValidationErrors);
+                var result = await _bookService.CreateBookAsync(bookRequestModel);
+                if (result.HasErrors()) { return BadRequest(result.ValidationErrors); }
+
+                return CreatedAtAction(nameof(GetBookById), new { id = result.BookDto.BookId }, result.BookDto);
             }
- 
-            return CreatedAtAction(nameof(GetBookById),new { id = result.BookDto.BookId },result.BookDto);
+            catch (ValidationException validationException)
+            {
+                return StatusCode(500, validationException.Message);
+            }
         }
 
         [HttpGet("[action]")]

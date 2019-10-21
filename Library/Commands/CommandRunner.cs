@@ -4,7 +4,7 @@ using Library.Domain.Models;
 
 namespace Library.Commands
 {
-    public class CommandRunner
+    public class CommandRunner : ICommandRunner
     {
         private readonly LibraryContext _context;
 
@@ -24,7 +24,7 @@ namespace Library.Commands
             return command.Result;
         }
 
-        public IEnumerable<string> Validate<TEntity>(ICommand<TEntity> command, TEntity entity)
+        public IList<string> Validate<TEntity>(ICommand<TEntity> command, TEntity entity)
         {
             return command.Validate(entity, _context);
         }
